@@ -41,16 +41,16 @@ AppDataSource.initialize()
     app.listen(3001);
 
     //insert new users for test
-    await AppDataSource.manager.save(
-      AppDataSource.manager.create(Student, {
-        name: "Phantom",
-        age: 24,
-        dof: "1996-01-01",
-        gender: "Male",
-        address: "colombo",
-        mobile: "0771234567",
-      })
-    );
+    // await AppDataSource.manager.save(
+    //   AppDataSource.manager.create(Student, {
+    //     name: "Phantom",
+    //     age: 24,
+    //     dof: "1996-01-01",
+    //     gender: "Male",
+    //     address: "colombo",
+    //     mobile: "0771234567",
+    //   })
+    // );
 
     // await AppDataSource.manager.save(
     //     AppDataSource.manager.create(Student, {

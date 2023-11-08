@@ -47,13 +47,13 @@ function EditToolbar(props: EditToolbarProps) {
     setRows((oldRows) => [
       {
         id,
-        // name: "",
-        // age: "",
-        // dof: new Date(),
-        // gender: "",
-        // address: "",
-        // mobile: "",
-        // isNew: true,
+        name: "",
+        age: "",
+        dof: new Date(),
+        gender: "",
+        address: "",
+        mobile: "",
+        isNew: true,
       },
       ...oldRows,
     ]);
