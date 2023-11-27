@@ -9,9 +9,6 @@ export class Student {
     name: string;
 
     @Column()
-    age: number;
-
-    @Column()
     dof: string;
 
     @Column()

@@ -27,11 +27,10 @@ export class StudentController {
   }
 
   async addStudent(request: Request, response: Response, next: NextFunction) {
-    const { name, age, dof, gender, address, mobile } = request.body;
+    const { name, dof, gender, address, mobile } = request.body;
 
     const user = Object.assign(new Student(), {
       name,
-      age,
       dof,
       gender,
       address,
@@ -76,9 +75,8 @@ export class StudentController {
     }
 
     // Update the student data
-    const { name, age, dof, gender, address, mobile } = request.body;
+    const { name, dof, gender, address, mobile } = request.body;
     student.name = name;
-    student.age = age;
     student.dof = dof;
     student.gender = gender;
     student.address = address;

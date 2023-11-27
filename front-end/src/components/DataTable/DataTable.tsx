@@ -26,8 +26,9 @@ import { minDate, maxDate } from "../../util/dateRange";
 import generateRandomId from "../../util/generateRandomId";
 import { initialRows } from "../../util/Data";
 import { useDispatch, useSelector } from "react-redux";
-import { setStudent } from "../../redux/studentSlice";
+// import { setStudent } from "../../redux/student/studentSlice";
 import { RootState } from "../../redux/store";
+import { addStudentRequest, deleteStudentRequest, fetchStudentRequest, updateStudentRequest } from "../../redux/student/studentSlice";
 
 // EditToolnarProps is interface its define its type and passing inside editToolBar function
 interface EditToolbarProps {
@@ -39,16 +40,17 @@ interface EditToolbarProps {
 
 // EditToolBar is return the add new button component and it will creating empty data row abow the rows
 function EditToolbar(props: EditToolbarProps) {
+  const dispatch = useDispatch();
   const { setRows, setRowModesModel } = props;
 
   // handleClick function will be called when user click on add new button and it will create empty row
   const handleClick = () => {
     const id = generateRandomId();
+    // dispatch(addStudentRequest())
     setRows((oldRows) => [
       {
         id,
         name: "",
-        age: "",
         dof: new Date(),
         gender: "",
         address: "",
@@ -89,19 +91,12 @@ function DataTable() {
 
   //Redux State Update an local state update each others
   const dispatch = useDispatch();
-  const tableRowRedux = useSelector((state: RootState) => state.table.rows);
-
+  const tableRowRedux = useSelector((state: RootState) => state.student.students);
+    console.log("from redux store : ",tableRowRedux)
   React.useEffect(() => {
-    //its conerting date to string function bcz cant pass date object directly to redux store serialization problem
-    // const newRows = rows.map((row) => {
-    //   return { ...row, dof: row.dof?.toString() };
-    // });
-    // dispatch(setStudent(newRows as Array<any>));
-    // console.log(newRows);
-
-    dispatch(setStudent(rows as Array<any>));
-    console.log(rows);
-  }, [rows, dispatch]);
+    console.log("useEffect table")
+    dispatch(fetchStudentRequest());
+  }, []);
 
   React.useEffect(() => {
     setRows(tableRowRedux);
@@ -121,16 +116,23 @@ function DataTable() {
 
   // handleEditClick function will be called when user click on edit button and it will change the mode to edit mode
   const handleEditClick = (id: GridRowId) => () => {
+    console.log("edit button clicked")
+    console.log("id : ",id)
+    dispatch(updateStudentRequest({id}))
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
   };
 
   // handleSaveClick function will be called when user click on save button and it will change the mode to view mode
   const handleSaveClick = (id: GridRowId) => () => {
+  console.log("save button clicked")
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
   };
 
   // handleDeleteClick function will be called when user click on delete button and it will delete the row
   const handleDeleteClick = (id: GridRowId) => () => {
+    console.log("delete button clicked")
+    console.log("id : ",id)
+    dispatch(deleteStudentRequest({id}))
     setRows(rows.filter((row) => row.id !== id));
   };
 
@@ -150,8 +152,19 @@ function DataTable() {
 
   // processRowUpdate function will be called when user click on save button and it will update the row
   const processRowUpdate = (newRow: GridRowModel) => {
+    console.log("------.processRowUpdate.-------")
+    console.log("newRow : ",newRow)
+    if(newRow.isNew){
+      dispatch(addStudentRequest(newRow))
+    }
+    else{
+      dispatch(updateStudentRequest(newRow))
+    }
+    // dispatch(update)
+    // dispatch(add)
     const updatedRow = { ...newRow, isNew: false };
     setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
+    console.log("updatedRow : ", updatedRow);
     return updatedRow;
   };
 
@@ -245,7 +258,7 @@ function DataTable() {
       field: "age",
       headerName: "Age",
       type: "number",
-      width: 80,
+      width: 100,
       align: "left",
       headerAlign: "left",
       editable: false,
